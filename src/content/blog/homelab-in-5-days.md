@@ -8,7 +8,7 @@ readTime: 12
 
 I didn't intend to build a homelab. I wanted to stop paying for services I didn't control.
 
-Ten months later: Proxmox hypervisor running 3 VMs, 17 Docker containers, a self-hosted email stack, a media server replacing Netflix and Spotify, a full monitoring and alerting pipeline, and an autonomous bot that manages all of it while I sleep.
+Ten months later: Proxmox hypervisor running 3 VMs, 17 Docker containers, a self-hosted email stack, a media server replacing Netflix, a full monitoring and alerting pipeline, and an autonomous bot that manages all of it while I sleep.
 
 The part that's hard to explain to most people: Claude Code did 95% of the implementation work. I reviewed, approved, and pressed enter. The AI wrote the Ansible playbooks, debugged the DNS, figured out why containers couldn't reach each other, and wrote the bot that now sends me a morning brief every day.
 
