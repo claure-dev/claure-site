@@ -1,0 +1,178 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const products = [
+  {
+    id: "homelab-starter",
+    title: "Homelab Starter Pack",
+    price: 19,
+    badge: "Most popular",
+    badgeStyle: "badge-green",
+    description: "Everything you need to go from bare metal to a fully functional homelab stack in a weekend. Sanitized, production-tested configurations from a real homelab running for 10+ months.",
+    contents: [
+      "19 Ansible playbooks (Proxmox VM setup, Docker, NPM, AdGuard, Uptime Kuma, Watchtower, and more)",
+      "Docker Compose files for all services",
+      "Service documentation templates",
+      "Network diagram and architecture overview",
+      "Backup configuration (restic + Backblaze B2)",
+      "DNS and reverse proxy setup guide",
+    ],
+    tags: ["Ansible", "Docker", "Proxmox", "Linux"],
+    lemonsqueezyUrl: "#", // TODO: replace with Lemon Squeezy checkout URL
+    note: "Secrets, IPs, and personal configs sanitized. Drop in your own values.",
+  },
+  {
+    id: "ai-sysadmin",
+    title: "AI Sysadmin Blueprint",
+    price: 29,
+    badge: "Most comprehensive",
+    badgeStyle: "badge-amber",
+    description: "The complete architecture for building an autonomous homelab assistant powered by Claude. FrontBot manages 17 containers, handles email triage, generates morning briefs, and remediates issues — all while you sleep.",
+    contents: [
+      "Full FrontBot v3 architecture walkthrough",
+      "10 provider module templates (health, email, calendar, media, finance, and more)",
+      "Claude integration patterns with $0 marginal cost (Claude Max sub)",
+      "Scheduler design with error isolation and missed-task recovery",
+      "Morning Brief pipeline: gather → analyze → synthesize → deliver",
+      "Matrix bot integration for command/control",
+      "72 test examples across all providers",
+    ],
+    tags: ["Python", "Claude API", "Matrix", "Automation"],
+    lemonsqueezyUrl: "#", // TODO: replace with Lemon Squeezy checkout URL
+    note: "Architecture-focused. Bring your own Claude API key or Max subscription.",
+  },
+  {
+    id: "media-server",
+    title: "Media Server Complete",
+    price: 14,
+    badge: "Quick deploy",
+    badgeStyle: "badge-blue",
+    description: "Self-hosted Netflix/Spotify replacement that runs on a $15/month VPS or old PC. Automated content discovery, requests, and downloads. The whole stack configured and ready to deploy.",
+    contents: [
+      "Jellyfin + Jellyseerr + Radarr + Sonarr + Prowlarr + SABnzbd Docker Compose stack",
+      "Ansible playbook for one-command deployment",
+      "Auto-import lists (popular movies, curated collections)",
+      "Backup strategy for config dirs (not media files)",
+      "NPM reverse proxy config for public access",
+      "Content curation guide (what actually works for families)",
+    ],
+    tags: ["Jellyfin", "Docker", "Ansible", "*arr stack"],
+    lemonsqueezyUrl: "#", // TODO: replace with Lemon Squeezy checkout URL
+    note: "Requires Usenet account (~$7/mo) or BitTorrent client for actual downloads.",
+  },
+  {
+    id: "ai-video-pipeline",
+    title: "AI Video Pipeline",
+    price: 24,
+    badge: "Experimental",
+    badgeStyle: "badge-blue",
+    description: "Generate YouTube Shorts in 45 seconds at $0 marginal cost. Voice cloning, SDXL image generation, terminal animations, and FFmpeg assembly — entirely on local GPU. The pipeline that powers this channel.",
+    contents: [
+      "Complete pipeline scripts (generate_short.py, dynamic_edit.py, effects.py)",
+      "Chatterbox TTS setup with voice cloning (3.2GB VRAM)",
+      "SDXL Turbo image generation with 1080p upscaling",
+      "Terminal frame animation generator (PIL-based, macOS-style)",
+      "Ken Burns camera effects via FFmpeg zoompan",
+      "Whisper subtitle generation and audio-synced scene cuts",
+      "Music bed layer with automatic ducking",
+      "Channel branding templates",
+    ],
+    tags: ["Python", "FFmpeg", "SDXL", "TTS", "RTX 3080"],
+    lemonsqueezyUrl: "#", // TODO: replace with Lemon Squeezy checkout URL
+    note: "Requires NVIDIA GPU with 8GB+ VRAM. Tested on RTX 3080.",
+  },
+];
+---
+
+<Layout
+  title="Products — claure.org"
+  description="Downloadable homelab tools: Ansible playbooks, AI sysadmin blueprint, media server stack, and AI video pipeline. Real configs from a real homelab."
+>
+  <main>
+    <section style="padding: 4rem 0 2rem;">
+      <div class="container">
+        <div class="section-header">
+          <h1 style="font-size: 2.5rem; margin: 0 0 0.5rem;">Products</h1>
+          <p>
+            Packaged knowledge from building and running a homelab for 10+ months.
+            Download, adapt, deploy. No subscriptions.
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+          {products.map(product => (
+            <div id={product.id} class="card" style="padding: 2rem;">
+              <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                    <h2 style="margin: 0; font-size: 1.5rem;">{product.title}</h2>
+                    <span class={`badge ${product.badgeStyle}`}>{product.badge}</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    {product.tags.map(tag => (
+                      <span class="badge badge-blue" style="font-size: 0.7rem;">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <div><span class="price">${product.price}</span><span class="price-tag">one-time</span></div>
+                </div>
+              </div>
+
+              <p style="color: var(--text2); margin: 0 0 1.5rem;">{product.description}</p>
+
+              <div style="margin-bottom: 1.5rem;">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em;">What's included</div>
+                <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.4rem;">
+                  {product.contents.map(item => (
+                    <li style="display: flex; gap: 0.5rem; color: var(--text2); font-size: 0.9rem;">
+                      <span style="color: var(--accent); flex-shrink: 0;">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {product.note && (
+                <div style="background: rgba(88, 166, 255, 0.08); border: 1px solid rgba(88, 166, 255, 0.2); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--text2);">
+                  <strong style="color: var(--accent2);">Note:</strong> {product.note}
+                </div>
+              )}
+
+              <a href={product.lemonsqueezyUrl} class="btn btn-primary">
+                Buy for ${product.price} →
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section style="padding: 3rem 0 4rem; border-top: 1px solid var(--border);">
+      <div class="container">
+        <div class="section-header">
+          <h2>FAQ</h2>
+        </div>
+        <div style="max-width: 700px; display: flex; flex-direction: column; gap: 1.5rem;">
+          <div>
+            <h3 style="margin: 0 0 0.5rem;">Are these real configs from a real homelab?</h3>
+            <p style="color: var(--text2); margin: 0;">Yes. Sanitized to remove personal IPs, secrets, and credentials — but otherwise identical to what's running in production. The architecture decisions, file structure, and operational patterns are genuine.</p>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 0.5rem;">What if something doesn't work for my setup?</h3>
+            <p style="color: var(--text2); margin: 0;">These are starting points, not magic deploys. The configs assume Proxmox + Ubuntu VMs on a home network. Adapting to other environments requires understanding what you're deploying. The documentation helps, but this isn't a managed service.</p>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 0.5rem;">Why sell this if it's already on GitHub?</h3>
+            <p style="color: var(--text2); margin: 0;">The public Vault repo has documentation. The products add the missing pieces: pre-configured playbooks, the exact variables that work, architecture commentary that explains the why, and packaging that saves hours of cross-referencing.</p>
+          </div>
+          <div>
+            <h3 style="margin: 0 0 0.5rem;">Do prices change?</h3>
+            <p style="color: var(--text2); margin: 0;">Prices may go up as products mature and get more content. What you buy includes future updates to that product version.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

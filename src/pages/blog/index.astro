@@ -1,0 +1,71 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout
+  title="Blog — claure.org"
+  description="Deep dives on homelab architecture, AI automation, self-hosting, and lessons learned."
+>
+  <main>
+    <section style="padding: 4rem 0 2rem;">
+      <div class="container">
+        <div class="section-header">
+          <h1 style="font-size: 2.5rem; margin: 0 0 0.5rem;">Blog</h1>
+          <p>Homelab automation, AI integration patterns, and infrastructure lessons.</p>
+        </div>
+
+        {posts.length === 0 ? (
+          <div class="card" style="text-align: center; padding: 3rem;">
+            <p style="color: var(--text2); margin: 0 0 1rem;">First posts coming soon.</p>
+            <p style="color: var(--text2); font-size: 0.9rem; margin: 0 0 1.5rem;">
+              Subscribe to get notified when they land.
+            </p>
+            <form
+              action="https://buttondown.com/api/emails/embed-subscribe/claure"
+              method="post"
+              class="newsletter-form"
+              style="justify-content: center;"
+            >
+              <input type="email" name="email" placeholder="your@email.com" required />
+              <button type="submit" class="btn btn-primary">Notify me</button>
+            </form>
+          </div>
+        ) : (
+          <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 720px;">
+            {posts.map(post => (
+              <a
+                href={`/blog/${post.id}`}
+                style="text-decoration: none;"
+              >
+                <div class="card" style="cursor: pointer;">
+                  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+                    {post.data.tags.slice(0, 4).map(tag => (
+                      <span class="badge badge-blue">{tag}</span>
+                    ))}
+                  </div>
+                  <h2 style="margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--text);">
+                    {post.data.title}
+                  </h2>
+                  <p style="color: var(--text2); margin: 0 0 1rem; font-size: 0.9rem;">
+                    {post.data.description}
+                  </p>
+                  <div style="display: flex; gap: 1rem; color: var(--text2); font-size: 0.8rem;">
+                    <span>
+                      {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </span>
+                    {post.data.readTime && <span>{post.data.readTime} min read</span>}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+</Layout>
