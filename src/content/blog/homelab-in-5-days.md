@@ -103,7 +103,7 @@ The value is in:
 
 4. **The 3am problem.** Something breaks at 3am. With AI assistance, you can actually fix it at 3am without a full engineering-brain context load. "Something is wrong with NPM, here's the logs" plus `ssh infra docker logs npm` gets you to root cause in 10 minutes.
 
-The stack is live. The bot is running. If you want the configs, they're in the products section.
+The stack is live. The bot is running. More details on the [projects page](/projects).
 
 ---
 

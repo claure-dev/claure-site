@@ -194,4 +194,4 @@ The character and channel are also still being defined. One AI character, one ch
 
 ---
 
-*The pipeline scripts are available in the [AI Video Pipeline product](/products#ai-video-pipeline). Includes voice settings, SDXL prompts, and the full FFmpeg assembly chain.*
+*Check out the [Content Forge project](/projects) for the latest version of this pipeline, now with a web UI, brand system, and effects workbench.*
