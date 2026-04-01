@@ -3,90 +3,21 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="claure.org — Homelab Automation & AI Tools"
-  description="Practical guides and tools for running a self-hosted homelab with AI automation. Built by someone who's done it."
+  title="claure.org"
+  description="Adam's homelab and AI projects."
 >
-  <!-- Hero -->
   <section style="padding: 5rem 0 3rem;">
     <div class="container">
-      <div style="max-width: 700px;">
-        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-          <span class="badge badge-green">Self-hosted</span>
-          <span class="badge badge-blue">AI-automated</span>
-          <span class="badge badge-amber">$0 marginal cost</span>
-        </div>
-        <h1 style="font-size: 3rem; margin: 0 0 1.25rem; line-height: 1.2;">
-          Your homelab,<br />fully automated.
+      <div style="max-width: 600px;">
+        <h1 style="font-size: 2.5rem; margin: 0 0 1rem; line-height: 1.2;">
+          ~/claure.org
         </h1>
-        <p style="font-size: 1.2rem; color: var(--text2); margin: 0 0 2rem; max-width: 540px;">
-          Practical guides and tools for running a self-hosted infrastructure
-          with AI doing 95% of the work. Real configs from a real homelab.
+        <p style="font-size: 1.1rem; color: var(--text2); margin: 0 0 2rem;">
+          I run a homelab and build things with AI. This is where I write about it.
         </p>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <a href="/projects" class="btn btn-primary">See Projects</a>
-          <a href="/blog" class="btn btn-outline">Read the Blog</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Terminal demo -->
-  <section style="padding: 2rem 0 4rem;">
-    <div class="container">
-      <div class="terminal" style="max-width: 700px;">
-        <div class="terminal-bar">
-          <div class="terminal-dot red"></div>
-          <div class="terminal-dot yellow"></div>
-          <div class="terminal-dot green"></div>
-        </div>
-        <div class="terminal-body">
-          <div><span class="prompt">adam@brain</span>:~/frontbot$ <span>./status.py</span></div>
-          <div class="output" style="margin-top: 0.5rem;">
-            ✓ 17 containers running across 3 VMs<br />
-            ✓ Morning brief delivered at 07:30 ET<br />
-            ✓ 23 emails triaged, 7 archived automatically<br />
-            ✓ Disk at 34% on all hosts (trend: stable)<br />
-          </div>
-          <div style="margin-top: 0.75rem;"><span class="prompt">adam@brain</span>:~/frontbot$ <span style="opacity: 0.5;">_</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- What you'll find here -->
-  <section style="padding: 3rem 0; border-top: 1px solid var(--border);">
-    <div class="container">
-      <div class="section-header">
-        <h2>What's here</h2>
-        <p>Real infrastructure, real configs. Not tutorials for beginners — tools for people who want it done.</p>
-      </div>
-      <div class="grid-3">
-        <div class="card">
-          <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">🤖</div>
-          <h3 style="margin: 0 0 0.5rem;">FrontBot</h3>
-          <p style="color: var(--text2); margin: 0; font-size: 0.9rem;">
-            An autonomous sysadmin bot that monitors infrastructure, triages email,
-            and sends a daily morning brief. Claude-powered, Matrix-connected.
-          </p>
-          <a href="/projects" style="display: inline-block; margin-top: 1rem; font-size: 0.85rem;">Learn more →</a>
-        </div>
-        <div class="card">
-          <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">🎬</div>
-          <h3 style="margin: 0 0 0.5rem;">Content Forge</h3>
-          <p style="color: var(--text2); margin: 0; font-size: 0.9rem;">
-            AI video pipeline — voice cloning, image generation, FFmpeg assembly.
-            YouTube Shorts from topic to MP4 in under a minute, on local GPU.
-          </p>
-          <a href="/projects" style="display: inline-block; margin-top: 1rem; font-size: 0.85rem;">Learn more →</a>
-        </div>
-        <div class="card">
-          <div style="font-size: 1.5rem; margin-bottom: 0.75rem;">📝</div>
-          <h3 style="margin: 0 0 0.5rem;">Technical Blog</h3>
-          <p style="color: var(--text2); margin: 0; font-size: 0.9rem;">
-            Deep dives on homelab architecture, AI automation patterns, and lessons
-            learned running 26+ services.
-          </p>
-          <a href="/blog" style="display: inline-block; margin-top: 1rem; font-size: 0.85rem;">Read the blog →</a>
+          <a href="/blog" class="btn btn-primary">Blog</a>
+          <a href="/projects" class="btn btn-outline">Projects</a>
         </div>
       </div>
     </div>
