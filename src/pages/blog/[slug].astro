@@ -3,16 +3,21 @@ import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts
+  const posts = (await getCollection('blog'))
     .filter(p => !p.data.draft)
-    .map(post => ({
-      params: { slug: post.id },
-      props: post,
-    }));
+    .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      prev: posts[i - 1] || null,
+      next: posts[i + 1] || null,
+    },
+  }));
 }
 
-const post = Astro.props;
+const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
 ---
 
@@ -24,4 +29,48 @@ const { Content } = await render(post);
   readTime={post.data.readTime}
 >
   <Content />
+
+  <nav class="post-nav">
+    {prev ? (
+      <a href={`/blog/${prev.id}`} class="post-nav-link">
+        <span class="post-nav-label">&larr; Previous</span>
+        <span class="post-nav-title">{prev.data.title}</span>
+      </a>
+    ) : <div />}
+    {next ? (
+      <a href={`/blog/${next.id}`} class="post-nav-link post-nav-next">
+        <span class="post-nav-label">Next &rarr;</span>
+        <span class="post-nav-title">{next.data.title}</span>
+      </a>
+    ) : <div />}
+  </nav>
 </BlogLayout>
+
+<style>
+  .post-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    max-width: 50%;
+  }
+  .post-nav-next { text-align: right; margin-left: auto; }
+  .post-nav-label {
+    font-size: 0.8rem;
+    color: var(--text2);
+  }
+  .post-nav-title {
+    font-size: 0.9rem;
+    color: var(--accent2);
+    font-weight: 500;
+  }
+  .post-nav-link:hover .post-nav-title { text-decoration: underline; }
+</style>
