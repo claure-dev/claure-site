@@ -19,6 +19,7 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
 ---
 
 <Layout title={`${title} — claure.org`} description={description}>
+  <div class="reading-progress" id="reading-progress"></div>
   <main>
     <div class="container" style="padding-top: 3rem; padding-bottom: 4rem;">
       <div style="max-width: 720px; margin: 0 auto;">
@@ -60,4 +61,27 @@ const formattedDate = pubDate.toLocaleDateString('en-US', {
       </div>
     </div>
   </main>
+
+  <script>
+    const bar = document.getElementById('reading-progress');
+    if (bar) {
+      window.addEventListener('scroll', () => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = h > 0 ? `${(window.scrollY / h) * 100}%` : '0%';
+      });
+    }
+  </script>
+
+  <style>
+    .reading-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      width: 0%;
+      z-index: 200;
+      transition: width 50ms;
+    }
+  </style>
 </Layout>
