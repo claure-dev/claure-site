@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="About — claure.org"
+  description="Who I am, what I build, and why I run my own infrastructure."
+>
+  <main>
+    <section style="padding: 4rem 0 2rem;">
+      <div class="container">
+        <div style="max-width: 700px;">
+          <h1 style="font-size: 2.5rem; margin: 0 0 2rem;">About</h1>
+
+          <div class="prose">
+            <p>
+              I'm Adam. I build software, run a homelab, and use AI tools to do both faster
+              than should be reasonable for one person.
+            </p>
+
+            <p>
+              The homelab started as a way to stop paying for services I didn't control.
+              It turned into three Proxmox VMs running 17+ containers, an autonomous ops
+              bot, and a local AI video pipeline. The whole thing is managed by two AI agents
+              and me occasionally pressing enter.
+            </p>
+
+            <h2>The setup</h2>
+
+            <p>
+              <strong>FrontBot</strong> is the always-on operator — a Python service on a dedicated VM
+              that monitors infrastructure, triages email across 10 accounts, and sends me a
+              morning brief every day. It runs <code>claude -p</code> for synthesis and talks
+              to me over Matrix.
+            </p>
+
+            <p>
+              <strong>Desk</strong> is the development agent — Claude Code sessions where I do
+              actual building. FrontBot reviews what Desk builds, proposes what's next, and
+              maintains continuity between sessions.
+            </p>
+
+            <p>
+              <strong>Content Forge</strong> is the latest project — an AI video pipeline that
+              generates YouTube Shorts on local GPU. Voice cloning, image generation, depth-based
+              parallax effects, automated subtitles. The whole thing runs on an RTX 3080.
+            </p>
+
+            <h2>This site</h2>
+
+            <p>
+              Built with <a href="https://astro.build">Astro</a>, hosted on my own
+              infrastructure behind Nginx Proxy Manager. I write here about the things I
+              learn building and running all of this.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
