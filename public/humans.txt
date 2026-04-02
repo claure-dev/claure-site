@@ -1,0 +1,14 @@
+/* TEAM */
+Name: Adam
+Site: claure.org
+Location: United States
+
+/* THANKS */
+Claude Code — claude.ai/claude-code
+Astro — astro.build
+FrontBot — github.com/claure-lab/frontbot
+
+/* SITE */
+Standards: HTML5, CSS3
+Software: Astro 6, MDX
+Hosting: Self-hosted on Proxmox + Nginx Proxy Manager
