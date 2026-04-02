@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const categories = [
+  {
+    name: "Hardware",
+    items: [
+      { name: "Beelink Mini PC", detail: "Proxmox hypervisor, 3 VMs" },
+      { name: "GL-iNet Flint 2", detail: "Router/gateway" },
+      { name: "RTX 3080 Desktop", detail: "Dev workstation, GPU compute" },
+      { name: "Framework Laptop 13", detail: "Mobile admin" },
+    ],
+  },
+  {
+    name: "Infrastructure",
+    items: [
+      { name: "Proxmox VE", detail: "Hypervisor — 3 VMs, Sunday snapshots" },
+      { name: "Docker", detail: "17+ containers across 3 hosts" },
+      { name: "Ansible", detail: "All deployments, all the time" },
+      { name: "Nginx Proxy Manager", detail: "Reverse proxy + SSL" },
+      { name: "AdGuard Home", detail: "Network-wide DNS + ad blocking" },
+      { name: "Uptime Kuma", detail: "Monitoring + push health checks" },
+    ],
+  },
+  {
+    name: "AI & Dev Tools",
+    items: [
+      { name: "Claude Code (Max)", detail: "Primary development tool" },
+      { name: "Claude API", detail: "FrontBot synthesis, script generation" },
+      { name: "Chatterbox TTS", detail: "Voice cloning, runs on 3.2GB VRAM" },
+      { name: "Flux (ComfyUI)", detail: "Image generation on local GPU" },
+      { name: "Whisper", detail: "Subtitle generation + alignment" },
+      { name: "DepthFlow", detail: "Parallax effects from depth maps" },
+    ],
+  },
+  {
+    name: "Services (self-hosted)",
+    items: [
+      { name: "Synapse (Matrix)", detail: "Messaging + bot control" },
+      { name: "Jellyfin", detail: "Media streaming" },
+      { name: "Radarr / Sonarr / Prowlarr", detail: "Media automation" },
+      { name: "Proton Mail Bridge", detail: "IMAP/SMTP for encrypted email" },
+      { name: "Himalaya CLI", detail: "10 IMAP accounts" },
+    ],
+  },
+  {
+    name: "Backup",
+    items: [
+      { name: "restic → Backblaze B2", detail: "Daily offsite, ~$0.50/month" },
+      { name: "Proxmox vzdump → NFS", detail: "Weekly local VM backup" },
+      { name: "Proxmox snapshots", detail: "Weekly, pre-change" },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Uses — claure.org"
+  description="Hardware, software, and services running in my homelab."
+>
+  <main>
+    <section style="padding: 4rem 0 2rem;">
+      <div class="container">
+        <div class="section-header">
+          <h1 style="font-size: 2.5rem; margin: 0 0 0.5rem;">Uses</h1>
+          <p>What's running in the homelab and on my desk.</p>
+        </div>
+
+        <div style="max-width: 700px; display: flex; flex-direction: column; gap: 2.5rem;">
+          {categories.map(cat => (
+            <div>
+              <h2 style="font-size: 1.2rem; margin: 0 0 1rem; color: var(--accent);">{cat.name}</h2>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                {cat.items.map(item => (
+                  <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0.4rem 0; border-bottom: 1px solid var(--border);">
+                    <span style="font-weight: 500;">{item.name}</span>
+                    <span style="color: var(--text2); font-size: 0.85rem; text-align: right;">{item.detail}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
