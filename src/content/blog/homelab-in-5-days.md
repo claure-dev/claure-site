@@ -1,110 +1,64 @@
 ---
-title: "How I Built a Complete Homelab in 10 Months with AI"
-description: "Starting from zero to 26 services, 3 VMs, and a fully autonomous sysadmin bot — with Claude doing 95% of the work."
+title: "10 Months of AI-Assisted Homelab: What Actually Happened"
+description: "I gave an AI agent sudo access and told it to build me a homelab. Here's the honest version."
 pubDate: 2026-03-18
-tags: ["homelab", "automation", "AI", "proxmox", "docker"]
-readTime: 12
+tags: ["homelab", "AI", "proxmox", "docker"]
+readTime: 8
 ---
 
-I didn't intend to build a homelab. I wanted to stop paying for services I didn't control.
+I didn't plan to build a homelab. I planned to stop paying Dropbox $12/month. Ten months later I have three VMs, 17 containers, an autonomous sysadmin bot, and a very confused power bill.
 
-Ten months later: Proxmox hypervisor running 3 VMs, 17 Docker containers, a self-hosted email stack, a media server replacing Netflix, a full monitoring and alerting pipeline, and an autonomous bot that manages all of it while I sleep.
+The trajectory was: self-host one thing → realize you need DNS → realize you need a reverse proxy → realize you need monitoring for the reverse proxy → realize you need a bot to watch the monitoring. Classic scope creep, except the AI was writing code faster than I could scope-creep.
 
-The part that's hard to explain to most people: Claude Code did 95% of the implementation work. I reviewed, approved, and pressed enter. The AI wrote the Ansible playbooks, debugged the DNS, figured out why containers couldn't reach each other, and wrote the bot that now sends me a morning brief every day.
+## What I actually deployed
 
-This is the story of how that happened.
+A $150 Beelink mini PC running Proxmox, split into three VMs:
 
-## The starting point
+**infra** runs the network layer — Nginx Proxy Manager, AdGuard, Uptime Kuma, the Omada controller for my access point. Everything that touches DNS or routing lives here because when this VM goes down, it should be obvious.
 
-A GL-iNet Flint 2 router, a Beelink mini PC I bought for $150, and a strong opinion that I shouldn't have to pay someone else to run my own data.
+**brain** is where the AI lives. FrontBot (the sysadmin bot), a Matrix server for communication, Proton Mail Bridge for email access. This is the only VM that costs me sleep when it has problems.
 
-The first decision was Proxmox instead of bare Docker on the mini PC. That turned out to be correct — VMs are significantly easier to manage than trying to keep everything on one machine. Snapshots before risky changes. Easy rollback. The ability to blow up VM 100 without touching VM 101.
+**media** is the entertainment stack — Jellyfin, the *arr suite, SABnzbd. The thing that actually got my wife to stop asking why there's a mini PC in the closet.
 
-## How AI-assisted development actually works
+## The AI-assisted part
 
-The workflow isn't "ask AI, get code, done." It's closer to pair programming where one partner (me) sets direction and reviews output, and the other (Claude) does the research, writes the implementation, and catches things I'd miss.
+I use Claude Code for almost everything. The workflow isn't "generate code and paste it." It's more like having a very fast junior engineer who has read every man page but has never operated a production system.
 
-A concrete example: setting up Nginx Proxy Manager with AdGuard DNS.
+Example: I asked Claude to set up AdGuard as the network DNS. It wrote perfect config. The config worked. Then nothing on my network could resolve for 30 seconds every few minutes. Turns out my router had a DNS fallback set to Cloudflare, and Cloudflare was winning the race sometimes and returning public IPs for internal services.
 
-The naive approach would be: install NPM, install AdGuard, configure DNS, done. What actually happens: AdGuard needs to be the DNS server for the router, but the router has a fallback DNS that sometimes wins the race. Cloudflare responds faster than AdGuard and returns the wrong IP for internal services. This took two hours to debug and involved packet captures, router config analysis, and understanding how dnsmasq handles dual-server configurations.
+Claude identified the race condition after I described the symptoms. It proposed removing the fallback entirely. I confirmed that was safe (it was — AdGuard itself falls back to upstream resolvers). The fix was one router setting.
 
-Claude worked through this with me. Identified the race condition. Explained why removing the fallback entirely (rather than changing its priority) was the right fix. Wrote the AdGuard config and documented the gotcha for future reference.
+That kind of loop — AI writes the thing, I discover the edge case in production, AI diagnoses it — happens daily. The gotcha list is up to 43 entries. Each one is a lesson that now persists across sessions.
 
-That gotcha is now in my auto-memory system. Every future session, Claude knows not to touch the router's DNS fallback. The lesson compounds.
+## The thing that actually works well
 
-## The infrastructure stack (what ended up running)
+Morning briefs. Every day at 7:30 AM, FrontBot collects data from 10+ sources — weather, all email accounts, calendar, infrastructure health, media activity — and synthesizes it into one message. "Here's what happened overnight, here's what needs attention, here's your day."
 
-Three VMs, all Proxmox:
+I read it in 60 seconds over coffee. I've caught infrastructure issues, appointment conflicts, and important emails before opening a single app.
 
-**infra (VM 100):** Network services. Nginx Proxy Manager, AdGuard Home, Uptime Kuma, Homepage dashboard, Omada controller, Speedtest Tracker, Dozzle. Everything that touches DNS and routing lives here.
+The email triage alone is worth it. 10 accounts. Most of it is noise. FrontBot reads subject lines and body text, scores urgency, and tells me which 3 out of 50 emails actually need a response.
 
-**brain (VM 101):** The smart layer. FrontBot, Matrix (Synapse + PostgreSQL), Proton Mail Bridge, 10 email accounts managed via Himalaya CLI. This is where the AI agent lives and runs.
+## What I'd do differently
 
-**media (VM 102):** Entertainment. Jellyfin, Radarr, Sonarr, Prowlarr, SABnzbd, Jellyseerr. The whole *arr stack with automated content requests.
+Less Docker complexity upfront. I containerized everything from day one. Some things (Proton Mail Bridge, the CI runner) would have been simpler as native systemd services. Containers add a layer of networking indirection that burns you when things like IMAP bridges need to bind to specific interfaces.
 
-Each VM has:
-- An Ansible playbook for deployment
-- A service documentation file
-- Restic backups to Backblaze B2
-- Proxmox snapshots on Sundays
+More snapshot discipline earlier. The first time I broke a VM and had to rebuild from scratch, I started taking Proxmox snapshots before risky changes. The second time, I automated Sunday snapshots. The third time didn't happen.
 
-## The thing nobody talks about: managing state
+The backup strategy should have been day one, not month three. Config backup to B2 costs literal cents per month. There's no excuse for not having it from the start.
 
-The hardest part of running a homelab isn't deploying services — it's knowing what you deployed, why, and how it connects to everything else.
+## The numbers
 
-I built a documentation system (the Vault) that lives alongside the code. Every service has a doc. Every decision has a date and reasoning. Every gotcha gets captured and becomes permanent institutional knowledge.
+| Category | Cost |
+|----------|------|
+| Hardware (one-time) | ~$200 |
+| Backblaze B2 | $0.50/month |
+| Domain | $12/year |
+| Usenet | $7/month |
+| Claude Max | $100/month |
+| Electricity | ~$5/month |
 
-This matters more with AI assistance than it does solo. The AI doesn't remember between sessions. The Vault is the external memory. When I start a new session, Claude reads the HANDOFF.md, pulls the git log, checks the auto-memory, and picks up exactly where we left off.
+The Claude subscription is the expensive line. But it's not really a homelab cost — I use it for everything. The homelab rides on it.
 
-The documentation discipline that feels like overhead in the moment pays massive dividends when something breaks at 11pm and you need to know exactly what changed.
+The honest ROI: I replaced Netflix ($16), Dropbox ($12), a VPN ($5), and Google storage ($3) with self-hosted alternatives. That's $36/month in services I no longer pay for, against $12.50/month in operating costs. Net savings exist but they're not why I do this.
 
-## FrontBot: the part that surprised me
-
-About four months in, I started thinking about automation beyond "services running." What if the infrastructure could monitor itself? Triage email? Tell me what happened overnight?
-
-FrontBot started as a simple health-check bot. It's now a 10-provider modular system that:
-
-- Checks all hosts every 6 hours, analyzes trends, remediates known issues automatically
-- Triages 10 email accounts with AI priority scoring — urgent vs. actionable vs. noise
-- Sends a morning brief every day at 7:30 AM: weather, infrastructure health, email summary, upcoming calendar, media activity, finance snapshot
-- Watches calendar and DMs me 15 minutes before any appointment
-- Monitors the media stack and requests content based on watch history
-- Tracks business revenue and notifies on new sales
-
-The brief is the thing I interact with every morning. A structured synthesis of 10+ data sources, delivered as a Matrix message, that tells me everything I need to know in 60 seconds.
-
-Building each provider was a session of work. The architecture compounds: each new provider plugs into the same scheduler, the same brief pipeline, the same insight analysis layer.
-
-## What this actually cost
-
-Infrastructure costs:
-- Proxmox + mini PC: ~$200 one-time hardware (VMs are free)
-- Backblaze B2: ~$0.50/month for config backups (media files are re-downloadable)
-- Porkbun domain (claure.org): ~$12/year
-- Usenet access for media: ~$7/month
-
-Development costs:
-- Claude Code Max subscription: ~$100/month (zero marginal cost per session)
-- Time: ~15-30 minutes per day reviewing and approving changes
-
-The interesting thing about the Claude Max subscription: it enables true zero-marginal-cost AI development. FrontBot makes ~20 Claude API calls per day (briefs, triage, health synthesis). At pay-as-you-go pricing, that would add up. With Max, it's included.
-
-## The honest take on AI-assisted homelab building
-
-It's not magic. The AI makes mistakes. It sometimes suggests architecturally wrong approaches that I have to push back on. It occasionally misses context that changes the answer.
-
-The value is in:
-
-1. **Speed on the boring parts.** Ansible playbooks are tedious to write. Claude writes them correctly in 30 seconds. I review, test, deploy.
-
-2. **Research synthesis.** "How does Proton Mail Bridge handle IMAP authentication in a container?" would take 45 minutes of reading docs and StackOverflow. Claude knows the answer and gives it in 30 seconds, with the relevant gotchas.
-
-3. **Compounding knowledge.** The auto-memory and Vault documentation create a feedback loop. Each session is faster than the last because the AI has more context. Year 2 of this is going to be qualitatively different from year 1.
-
-4. **The 3am problem.** Something breaks at 3am. With AI assistance, you can actually fix it at 3am without a full engineering-brain context load. "Something is wrong with NPM, here's the logs" plus `ssh infra docker logs npm` gets you to root cause in 10 minutes.
-
-The stack is live. The bot is running. More details on the [projects page](/projects).
-
----
-
-*Next post: Building FrontBot from scratch — architecture decisions, the provider pattern, and why the scheduler matters more than you'd think.*
+I do this because debugging a DNS race condition at midnight is more fun than scrolling Twitter. Your mileage may vary.
