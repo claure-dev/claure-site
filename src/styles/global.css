@@ -212,6 +212,32 @@ footer .footer-inner {
   padding-left: 1rem;
   color: var(--text2);
 }
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 1.5rem 0;
+}
+.prose th {
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--border);
+  color: var(--text);
+  font-weight: 600;
+}
+.prose td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+.prose img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin: 1rem 0;
+}
+.prose strong { color: var(--text); }
+.prose h3 { margin-top: 1.5rem; }
 
 /* Grid layouts */
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
