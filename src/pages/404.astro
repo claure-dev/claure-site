@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — claure.org" description="Page not found.">
+  <main>
+    <section style="padding: 6rem 0; text-align: center;">
+      <div class="container">
+        <div class="terminal" style="max-width: 500px; margin: 0 auto;">
+          <div class="terminal-bar">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+          </div>
+          <div class="terminal-body">
+            <p style="margin: 0;"><span class="prompt">$</span> curl -I {Astro.url.pathname}</p>
+            <p style="margin: 0.5rem 0;"><span class="output">HTTP/1.1 <span class="highlight">404 Not Found</span></span></p>
+            <p style="margin: 0;"><span class="prompt">$</span> <span class="cursor">_</span></p>
+          </div>
+        </div>
+        <p style="color: var(--text2); margin-top: 2rem;">
+          Nothing here. <a href="/">Head home</a> or check the <a href="/blog">blog</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .cursor {
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
