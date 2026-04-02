@@ -1,0 +1,59 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter(p => !p.data.draft);
+  const tags = [...new Set(posts.flatMap(p => p.data.tags))];
+  return tags.map(tag => ({
+    params: { tag },
+    props: {
+      posts: posts
+        .filter(p => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<Layout
+  title={`#${tag} — claure.org`}
+  description={`Posts tagged "${tag}".`}
+>
+  <main>
+    <section style="padding: 4rem 0 2rem;">
+      <div class="container">
+        <div style="margin-bottom: 2rem;">
+          <a href="/blog" style="color: var(--text2); font-size: 0.9rem;">&larr; All posts</a>
+        </div>
+        <div class="section-header">
+          <h1 style="font-size: 2rem; margin: 0 0 0.5rem;">
+            <span class="badge badge-blue" style="font-size: 1rem; vertical-align: middle;">#{tag}</span>
+          </h1>
+          <p>{posts.length} post{posts.length !== 1 ? 's' : ''}</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 720px;">
+          {posts.map(post => (
+            <a href={`/blog/${post.id}`} style="text-decoration: none;">
+              <div class="card" style="cursor: pointer;">
+                <h2 style="margin: 0 0 0.5rem; font-size: 1.25rem; color: var(--text);">
+                  {post.data.title}
+                </h2>
+                <p style="color: var(--text2); margin: 0 0 0.75rem; font-size: 0.9rem;">
+                  {post.data.description}
+                </p>
+                <span style="color: var(--text2); font-size: 0.8rem;">
+                  {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
