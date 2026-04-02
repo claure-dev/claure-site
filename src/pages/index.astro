@@ -1,5 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
 <Layout
@@ -8,18 +14,77 @@ import Layout from '../layouts/Layout.astro';
 >
   <section style="padding: 5rem 0 3rem;">
     <div class="container">
-      <div style="max-width: 600px;">
-        <h1 style="font-size: 2.5rem; margin: 0 0 1rem; line-height: 1.2;">
-          ~/claure.org
-        </h1>
-        <p style="font-size: 1.1rem; color: var(--text2); margin: 0 0 2rem;">
-          I run a homelab and build things with AI. This is where I write about it.
-        </p>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <a href="/blog" class="btn btn-primary">Blog</a>
-          <a href="/projects" class="btn btn-outline">Projects</a>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+        <div>
+          <h1 style="font-size: 2.5rem; margin: 0 0 1rem; line-height: 1.2;">
+            ~/claure.org
+          </h1>
+          <p style="font-size: 1.1rem; color: var(--text2); margin: 0 0 2rem;">
+            Homelab infrastructure, AI automation, and the things I learn building them.
+          </p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a href="/blog" class="btn btn-primary">Read the blog</a>
+            <a href="/projects" class="btn btn-outline">Projects</a>
+          </div>
+        </div>
+        <div class="terminal hero-terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+          </div>
+          <div class="terminal-body">
+            <p style="margin: 0;"><span class="prompt">$</span> uptime</p>
+            <p style="margin: 0.3rem 0;"><span class="output">3 VMs, 17 containers, 287 days up</span></p>
+            <p style="margin: 0.5rem 0 0;"><span class="prompt">$</span> frontbot status</p>
+            <p style="margin: 0.3rem 0;"><span class="output">health: <span style="color: var(--accent);">all green</span></span></p>
+            <p style="margin: 0;"><span class="output">brief: delivered 07:30 ET</span></p>
+            <p style="margin: 0;"><span class="output">email: 47 triaged, 3 flagged</span></p>
+            <p style="margin: 0.5rem 0 0;"><span class="prompt">$</span> <span class="cursor">_</span></p>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
+  {posts.length > 0 && (
+    <section style="padding: 2rem 0 4rem;">
+      <div class="container">
+        <div class="section-header">
+          <h2 style="font-size: 1.5rem;">Recent posts</h2>
+        </div>
+        <div class="grid-2">
+          {posts.map(post => (
+            <a href={`/blog/${post.id}`} style="text-decoration: none;">
+              <div class="card" style="cursor: pointer; height: 100%;">
+                <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+                  {post.data.tags.slice(0, 3).map(tag => (
+                    <span class="badge badge-blue" style="font-size: 0.65rem;">{tag}</span>
+                  ))}
+                </div>
+                <h3 style="margin: 0 0 0.4rem; font-size: 1.1rem; color: var(--text);">
+                  {post.data.title}
+                </h3>
+                <p style="color: var(--text2); margin: 0; font-size: 0.85rem; line-height: 1.5;">
+                  {post.data.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 </Layout>
+
+<style>
+  .cursor {
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+  @media (max-width: 768px) {
+    .hero-terminal { display: none; }
+  }
+</style>
