@@ -4,21 +4,34 @@ import Layout from '../layouts/Layout.astro';
 const projects = [
   {
     title: "FrontBot",
-    description: "Always-on homelab manager. Monitors infrastructure, triages email across 10 accounts, delivers a morning brief, and remediates issues autonomously. Modular Python, Claude-powered synthesis, Matrix for command/control.",
-    tags: ["Python", "Claude", "Matrix", "Automation"],
-    status: "Running in production",
+    description: "Always-on homelab operator. Monitors infrastructure, triages email across 10 accounts, delivers daily briefs, and remediates issues autonomously. Reviews dev sessions, proposes next work, maintains continuity across ephemeral Claude Code sessions.",
+    tags: ["Python", "Claude", "Matrix", "SQLite"],
+    status: "Production",
+    github: "https://github.com/claure-lab/frontbot",
+    stats: "400+ tests, 20+ providers, runs 24/7",
   },
   {
     title: "Content Forge",
-    description: "AI video pipeline that generates YouTube Shorts on local GPU. Voice cloning via Chatterbox TTS, image generation via Flux, FFmpeg assembly with effects and subtitles. Workbench UI for iterating on runs.",
+    description: "AI video pipeline for YouTube Shorts. Script generation, voice cloning via Chatterbox TTS, image generation via Flux/Pollinations, depth-based parallax effects, automated subtitles, FFmpeg assembly. Web workbench for iterating on runs.",
     tags: ["Python", "FastAPI", "React", "FFmpeg", "ComfyUI"],
-    status: "Active development",
+    status: "Active dev",
+    github: "https://github.com/claure-lab/content-forge",
+    stats: "Script to video in ~60s on RTX 3080",
   },
   {
     title: "Homelab Infrastructure",
     description: "Proxmox hypervisor running 3 VMs, 17+ Docker containers. Nginx Proxy Manager, AdGuard, Uptime Kuma, Jellyfin media stack, Synapse Matrix server. All deployed via Ansible, backed up to Backblaze B2.",
     tags: ["Proxmox", "Docker", "Ansible", "Linux"],
-    status: "Running in production",
+    status: "Production",
+    github: "https://github.com/claure-lab/homelab-ansible",
+    stats: "3 VMs, automated snapshots + offsite backup",
+  },
+  {
+    title: "claure.org",
+    description: "This site. Astro 6 with terminal-aesthetic dark theme, self-hosted behind NPM.",
+    tags: ["Astro", "TypeScript", "MDX"],
+    status: "Live",
+    github: "https://github.com/claure-dev/claure-site",
   },
 ];
 ---
@@ -32,7 +45,7 @@ const projects = [
       <div class="container">
         <div class="section-header">
           <h1 style="font-size: 2.5rem; margin: 0 0 0.5rem;">Projects</h1>
-          <p>Things I'm building and running. All self-hosted, all AI-assisted.</p>
+          <p>Self-hosted, AI-assisted, and probably over-engineered.</p>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 2rem;">
@@ -49,7 +62,17 @@ const projects = [
                 </div>
                 <span class="badge badge-green">{project.status}</span>
               </div>
-              <p style="color: var(--text2); margin: 0;">{project.description}</p>
+              <p style="color: var(--text2); margin: 0 0 1rem;">{project.description}</p>
+              <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                {project.github && (
+                  <a href={project.github} style="font-size: 0.85rem;">GitHub &rarr;</a>
+                )}
+                {project.stats && (
+                  <span style="font-size: 0.8rem; color: var(--text2); font-family: var(--font-mono);">
+                    {project.stats}
+                  </span>
+                )}
+              </div>
             </div>
           ))}
         </div>
