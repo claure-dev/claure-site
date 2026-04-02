@@ -280,7 +280,11 @@ footer .footer-inner {
 .section-header h2 { font-size: 1.8rem; margin: 0 0 0.5rem; }
 .section-header p { color: var(--text2); margin: 0; }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   nav ul { gap: 1rem; }
-  .footer-inner { flex-direction: column; gap: 1rem; }
+  nav ul a { font-size: 0.8rem; }
+  .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
+  .prose table { font-size: 0.8rem; }
+  .prose th, .prose td { padding: 0.4rem 0.5rem; }
+  .container { padding: 0 1rem; }
 }
